@@ -216,5 +216,14 @@ class ArcRightLineView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : ArcRightLineView {
+            val view : ArcRightLineView = ArcRightLineView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
 
