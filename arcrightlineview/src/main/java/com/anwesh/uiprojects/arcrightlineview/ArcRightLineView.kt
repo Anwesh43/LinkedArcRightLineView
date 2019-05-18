@@ -193,5 +193,27 @@ class ArcRightLineView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : ArcRightLineView) {
+
+        private val arl : ArcRightLine = ArcRightLine(0)
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            arl.draw(canvas, paint)
+            animator.animate {
+                arl.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            arl.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
 
