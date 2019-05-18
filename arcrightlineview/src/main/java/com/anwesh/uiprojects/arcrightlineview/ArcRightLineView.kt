@@ -21,6 +21,8 @@ val scGap : Float = 0.05f
 val scDiv : Double = 0.51
 val foreColor : Int = Color.parseColor("#283593")
 val backColor : Int = Color.parseColor("#BDBDBD")
+val delay : Long = 20
+val rotDeg : Float = 120f
 
 fun Int.inverse() : Float = 1f / this
 fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
@@ -33,12 +35,12 @@ fun Float.mirrorValue(a : Int, b : Int) : Float {
 fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
 
 fun Canvas.drawArcRight(size : Float, sc : Float, paint : Paint) {
-    drawArc(RectF(-size / 2, -size / 2, size / 2, size / 2), 90f, 90f * sc, false, paint)
+    drawArc(RectF(-size / 2, -size / 2, size / 2, size / 2), 90f, rotDeg * sc, false, paint)
 }
 
 fun Canvas.drawRightLines(i : Int, size : Float, sc : Float, paint : Paint) {
     save()
-    rotate(90f * i)
+    rotate(rotDeg * i)
     drawLine(0f, size / 2, 0f, size / 2 + size / 2 * sc.divideScale(i, lines), paint)
     restore()
 }
@@ -107,7 +109,7 @@ class ArcRightLineView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(delay)
                     view.invalidate()
                 } catch(ex : Exception) {
 
@@ -147,6 +149,7 @@ class ArcRightLineView(ctx : Context) : View(ctx) {
 
         fun draw(canvas : Canvas, paint : Paint) {
             canvas.drawARLNode(i, state.scale, paint)
+            prev?.draw(canvas, paint)
         }
 
         fun update(cb : (Int, Float) -> Unit) {
